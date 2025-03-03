@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    environment {
-        CI = 'true'
-    }
+
     stages {
 
         stage('build') {
@@ -35,13 +33,19 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'main') {
+                        def container_name = 'nodemain'
+                        def image_name = 'nodemain:v1.0'
+
                         echo 'Running main branch steps'
-                        sh 'docker stop nodemain && docker rm nodemain'
-                        sh 'docker run --name nodemain -d -p 3000:3000 nodemain:v1.0'
+
+                        sh './scripts/deploy.sh ${container_name} ${image_name}'
                     } else if (env.BRANCH_NAME == 'dev') {
+                        def container_name = 'nodedev'
+                        def image_name = 'nodedev:v1.0'
+                        
                         echo 'Running dev branch steps'
-                        sh 'docker stop nodedev && docker rm nodedev'
-                        sh 'docker run --name nodedev -d -p 3001:3000 nodedev:v1.0'
+                        
+                        sh './scripts/deploy.sh ${container_name} ${image_name}'
                     }
                 }
             }
