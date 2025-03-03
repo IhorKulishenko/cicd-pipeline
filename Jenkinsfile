@@ -17,29 +17,28 @@ pipeline {
             }
         }
 
-	stage('build docker image') {
-	    when {
-		branch 'dev'
-	    }
+    	stage('build docker image') {
+    	    when {
+                branch 'dev'
+    	    }
             steps {
                 sh 'docker build -t nodedev:v1.0 .'
             }
         }
 
-	stage('build docker image') {
-	    when {
-		branch 'main'
-	    }
+    	stage('build docker image') {
+    	    when {
+                branch 'main'
+    	    }
             steps {
                 ssh 'docker build -t nodemain:v1.0 .'
             }
         }
 
-        stage('deploy')
+        stage('deploy') {
             steps {
                 sh 'echo "deploy stage"'
             }
         }
     }
 }
-
