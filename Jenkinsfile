@@ -17,21 +17,17 @@ pipeline {
             }
         }
 
-    	stage('build docker image') {
-    	    when {
-                branch 'dev'
-    	    }
+        stage('build docker image') {
             steps {
-                sh 'docker build -t nodedev:v1.0 .'
-            }
-        }
-
-    	stage('build docker image') {
-    	    when {
-                branch 'main'
-    	    }
-            steps {
-                sh 'docker build -t nodemain:v1.0 .'
+                script {
+                    if (env.BRANCH_NAME == 'main') {
+                        echo 'Running main branch steps'
+                        sh 'docker build -t nodemain:v1.0 .'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        echo 'Running dev branch steps'
+                        sh 'docker build -t nodedev:v1.0 .'
+                    }
+                }
             }
         }
 
