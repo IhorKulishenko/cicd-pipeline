@@ -31,7 +31,7 @@ pipeline {
                 branch 'main'
     	    }
             steps {
-                ssh 'docker build -t nodemain:v1.0 .'
+                sh 'docker build -t nodemain:v1.0 .'
             }
         }
 
