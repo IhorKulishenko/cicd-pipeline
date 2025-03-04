@@ -1,11 +1,6 @@
-container_name=$1
-# image_name=$2
+#!/bin/bash
 
-# image_id=$(docker image ls --filter "reference=$image_name"  --format='{{json .ID}}')
-# if [[ -z "$image_id" ]]; then
-#     echo "can't find image $image_name"
-#     exit 1
-# fi
+container_name=$1
 
 container_id=$(docker ps --filter "name=$container_name"  --format='{{json .ID}}')
 
@@ -15,4 +10,3 @@ if [[ -n "$container_id" ]]; then
 fi
 
 docker run --name $container_name -d -p 3000:3000 $image_name
-
