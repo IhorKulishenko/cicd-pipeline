@@ -38,14 +38,20 @@ pipeline {
 
                         echo 'Running main branch steps'
 
-                        sh './scripts/deploy.sh ${container_name} ${image_name}'
+                        sh '''
+                            ./scripts/undeploy.sh ${container_name}
+                            docker run -d --expose 3000 -p 3000:3000 ${image_name}
+                        '''
                     } else if (env.BRANCH_NAME == 'dev') {
                         def container_name = 'nodedev'
                         def image_name = 'nodedev:v1.0'
                         
                         echo 'Running dev branch steps'
                         
-                        sh './scripts/deploy.sh ${container_name} ${image_name}'
+                        sh '''
+                            ./scripts/undeploy.sh ${container_name}
+                            docker run -d --expose 3000 -p 3001:3000 ${image_name}
+                        '''
                     }
                 }
             }

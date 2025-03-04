@@ -1,11 +1,11 @@
 container_name=$1
-image_name=$2
+# image_name=$2
 
-image_id=$(docker image ls --filter "reference=$image_name"  --format='{{json .ID}}')
-if [[ -z "$image_id" ]]; then
-    echo "can't find image $image_name"
-    exit 1
-fi
+# image_id=$(docker image ls --filter "reference=$image_name"  --format='{{json .ID}}')
+# if [[ -z "$image_id" ]]; then
+#     echo "can't find image $image_name"
+#     exit 1
+# fi
 
 container_id=$(docker ps --filter "name=$container_name"  --format='{{json .ID}}')
 
