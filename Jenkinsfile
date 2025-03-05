@@ -39,7 +39,7 @@ pipeline {
                         echo 'Running main branch steps'
 
                         sh "./scripts/undeploy.sh ${container_name}"
-                        sh "docker run -d --expose 3000 -p 3000:3000 ${image_name}"
+                        sh "docker run -d --name ${container_name} -p 3000:3000 ${image_name}"
 
                     } else if (env.BRANCH_NAME == 'dev') {
                         def container_name = "nodedev"
@@ -48,7 +48,7 @@ pipeline {
                         echo 'Running dev branch steps'
                         
                         sh "./scripts/undeploy.sh ${container_name}"
-                        sh "docker run -d --expose 3000 -p 3001:3000 ${image_name}"
+                        sh "docker run -d --name ${container_name} -p 3001:3000 ${image_name}"
 
                     }
                 }
