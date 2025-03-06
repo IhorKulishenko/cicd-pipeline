@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'ghcr_token', variable: 'GHCR_TOKEN')]) {
-                        def NAMESPACE = 'ihor-kulishenko'
+                        def NAMESPACE = 'ihorkulishenko'
                         def TAG = "v1.0"
 
                         sh 'echo $GHCR_TOKEN | docker login ghcr.io -u IhorKulishenko --password-stdin'
