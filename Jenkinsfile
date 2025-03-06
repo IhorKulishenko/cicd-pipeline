@@ -18,41 +18,67 @@ pipeline {
         stage('build docker image') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'main') {
-                        echo 'Running main branch steps'
-                        sh 'docker build -t nodemain:v1.0 .'
+                    def IMAGE_NAME = ""
+                    
+                    if (env.BRANCH_NAME == 'main') {                        
+                        IMAGE_NAME = "nodemain"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        echo 'Running dev branch steps'
-                        sh 'docker build -t nodedev:v1.0 .'
+                        IMAGE_NAME = "nodedev"
                     }
+
+                    sh "docker build -t ${IMAGE_NAME}:v1.0 ."
                 }
             }
         }
 
-        stage('deploy') {
+        stage ('publish on GHCR') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'main') {
-                        def container_name = "nodemain"
-                        def image_name = "nodemain:v1.0"
+                    withCredentials([string(credentialsId: 'ghcr_token', variable: 'GHCR_TOKEN')]) {
+                        def NAMESPACE = 'ihor-kulishenko'
+                        def TAG = "v1.0"
 
-                        echo 'Running main branch steps'
+                        sh 'echo $GHCR_TOKEN | docker login ghcr.io -u IhorKulishenko --password-stdin'
 
-                        sh "./scripts/undeploy.sh ${container_name}"
-                        sh "docker run -d --name ${container_name} -p 3000:3000 ${image_name}"
+                        def REPOSITORY = ''
+                        if (env.BRANCH_NAME == 'main') {
+                            REPOSITORY = 'nodemain'
+                        } else if (env.BRANCH_NAME == 'dev') {
+                            REPOSITORY = 'nodedev'
+                        }
 
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        def container_name = "nodedev"
-                        def image_name = "nodedev:v1.0"
-                        
-                        echo 'Running dev branch steps'
-                        
-                        sh "./scripts/undeploy.sh ${container_name}"
-                        sh "docker run -d --name ${container_name} -p 3001:3000 ${image_name}"
+                        sh "docker tag ${REPOSITORY}:${TAG} ghcr.io/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
+                        sh "docker push ghcr.io/${NAMESPACE}/${REPOSITORY}:${TAG}"
                     }
                 }
             }
         }
+
+        // stage('deploy') {
+        //     steps {
+        //         script {
+        //             if (env.BRANCH_NAME == 'main') {
+        //                 def container_name = "nodemain"
+        //                 def image_name = "nodemain:v1.0"
+
+        //                 echo 'Running main branch steps'
+
+        //                 sh "./scripts/undeploy.sh ${container_name}"
+        //                 sh "docker run -d --name ${container_name} -p 3000:3000 ${image_name}"
+
+        //             } else if (env.BRANCH_NAME == 'dev') {
+        //                 def container_name = "nodedev"
+        //                 def image_name = "nodedev:v1.0"
+                        
+        //                 echo 'Running dev branch steps'
+                        
+        //                 sh "./scripts/undeploy.sh ${container_name}"
+        //                 sh "docker run -d --name ${container_name} -p 3001:3000 ${image_name}"
+
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
