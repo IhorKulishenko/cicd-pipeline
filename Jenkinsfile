@@ -23,6 +23,12 @@ pipeline {
             }
         }
 
+        stage('docker linter') {
+            steps {
+                sh 'hadolint Dockerfile'
+            }
+        }
+
         stage('build') {
             steps {
                 sh 'npm install'
