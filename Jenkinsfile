@@ -13,12 +13,12 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'main') {
-                        env.IMAGE_NAME = "nodemain"
+                        IMAGE_NAME = "nodemain"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        env.IMAGE_NAME = "nodedev"
+                        IMAGE_NAME = "nodedev"
                     }
 
-                    env.FULL_IMAGE_NAME = "ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
+                    FULL_IMAGE_NAME = "ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
                 }
             }
         }
