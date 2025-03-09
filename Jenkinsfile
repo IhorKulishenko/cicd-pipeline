@@ -34,7 +34,7 @@ pipeline {
 
         stage('build docker image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                sh "docker build -t ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG} ."
             }
         }
 
@@ -51,7 +51,7 @@ pipeline {
 
                         sh 'echo $GHCR_TOKEN | docker login ghcr.io -u IhorKulishenko --password-stdin'
 
-                        sh "docker tag ${IMAGE_NAME}:${TAG} ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
+                        // sh "docker tag ${IMAGE_NAME}:${TAG} ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
 
                         sh "docker push ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
                     }
