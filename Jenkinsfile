@@ -8,13 +8,14 @@ pipeline {
     }
     
     stages {
-
         stage('init') {
             steps {
-                if (env.BRANCH_NAME == 'main') {                        
-                    IMAGE_NAME = "nodemain"
-                } else if (env.BRANCH_NAME == 'dev') {
-                    IMAGE_NAME = "nodedev"
+                script {
+                    if (env.BRANCH_NAME == 'main') {
+                        IMAGE_NAME = "nodemain"
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        IMAGE_NAME = "nodedev"
+                    }
                 }
             }
         }
@@ -33,9 +34,7 @@ pipeline {
 
         stage('build docker image') {
             steps {
-                script {
-                    sh "docker build -t ${IMAGE_NAME}:${TAG} ."
-                }
+                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
             }
         }
 
