@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = ""
+        NAMESPACE = 'ihorkulishenko'
+        TAG = "v1.0"
+    }
+    
     stages {
-
-        environment {
-            IMAGE_NAME = ""
-            NAMESPACE = 'ihorkulishenko'
-            TAG = "v1.0"
-        }
 
         stage('init') {
             if (env.BRANCH_NAME == 'main') {                        
