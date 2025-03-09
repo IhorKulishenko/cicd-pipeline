@@ -38,13 +38,11 @@ pipeline {
             }
         }
 
-        /*stage('scan with trivy') {
+        stage('scan with trivy') {
             steps {
-                script {
-                    sh "trivy  image --no-progress --severity HIGH,CRITICAL --ignore-unfixed --format table ${IMAGE_NAME}:${TAG}"
-                }
+                sh "trivy  image --no-progress --severity HIGH,CRITICAL --ignore-unfixed --format table ${IMAGE_NAME}:${TAG}"
             }
-        }*/
+        }
 
         stage ('publish on GHCR') {
             steps {
