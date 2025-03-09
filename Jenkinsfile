@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = ""
+        FULL_IMAGE_NAME = ""
         NAMESPACE = 'ihorkulishenko'
         TAG = "v1.0"
     }
@@ -16,6 +17,8 @@ pipeline {
                     } else if (env.BRANCH_NAME == 'dev') {
                         IMAGE_NAME = "nodedev"
                     }
+
+                    FULL_IMAGE_NAME = "ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
                 }
             }
         }
@@ -34,13 +37,13 @@ pipeline {
 
         stage('build docker image') {
             steps {
-                sh "docker build -t ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG} ."
+                sh "docker build -t ${FULL_IMAGE_NAME} ."
             }
         }
 
         stage('scan with trivy') {
             steps {
-                sh "trivy  image --no-progress --severity HIGH,CRITICAL --ignore-unfixed --format table ${IMAGE_NAME}:${TAG}"
+                sh "trivy  image --no-progress --severity HIGH,CRITICAL --ignore-unfixed --format table ${FULL_IMAGE_NAME}"
             }
         }
 
@@ -53,7 +56,7 @@ pipeline {
 
                         // sh "docker tag ${IMAGE_NAME}:${TAG} ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
 
-                        sh "docker push ghcr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}"
+                        sh "docker push ${FULL_IMAGE_NAME}"
                     }
                 }
             }
