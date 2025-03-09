@@ -3,9 +3,11 @@ pipeline {
 
     stages {
 
-        def IMAGE_NAME = ""
-        def NAMESPACE = 'ihorkulishenko'
-        def TAG = "v1.0"
+        environment {
+            IMAGE_NAME = ""
+            NAMESPACE = 'ihorkulishenko'
+            TAG = "v1.0"
+        }
 
         stage('init') {
             if (env.BRANCH_NAME == 'main') {                        
