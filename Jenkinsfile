@@ -10,10 +10,12 @@ pipeline {
     stages {
 
         stage('init') {
-            if (env.BRANCH_NAME == 'main') {                        
-                IMAGE_NAME = "nodemain"
-            } else if (env.BRANCH_NAME == 'dev') {
-                IMAGE_NAME = "nodedev"
+            steps {
+                if (env.BRANCH_NAME == 'main') {                        
+                    IMAGE_NAME = "nodemain"
+                } else if (env.BRANCH_NAME == 'dev') {
+                    IMAGE_NAME = "nodedev"
+                }
             }
         }
 
